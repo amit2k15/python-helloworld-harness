@@ -1,0 +1,44 @@
+pipeline:
+  identifier: hello_pipeline
+  name: Hello Pipeline
+  stages:
+    - stage:
+        identifier: build_and_push
+        name: Build and Push
+        type: ci
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Docker Login
+                  spec:
+                    shell: Sh
+                    command: |
+                      echo "${DOCKER_PASSWORD}" | docker login host.docker.internal:3000 -u "${DOCKER_USERNAME}" --password-stdin
+
+              - step:
+                  type: Run
+                  name: Build Docker Image
+                  spec:
+                    shell: Sh
+                    command: |
+                      docker build -t host.docker.internal:3000/hello-world:latest .
+
+              - step:
+                  type: Run
+                  name: Push Docker Image
+                  spec:
+                    shell: Sh
+                    command: |
+                      docker push host.docker.internal:3000/hello-world:latest
+
+              - step:
+                  type: Run
+                  name: Run Docker Container
+                  spec:
+                    shell: Sh
+                    command: |
+                      docker stop hello-world || true
+                      docker rm hello-world || true
+                      docker run -d -p 5000:5000 --name hello-world host.docker.internal:3000/hello-world:latest
