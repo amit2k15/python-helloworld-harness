@@ -1,0 +1,17 @@
+template:
+  name: My
+  identifier: My
+  versionLabel: v1
+  type: Step
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  spec:
+    type: Run
+    spec:
+      connectorRef: account.harnessImage
+      image: python:3.9
+      shell: Sh
+      command: python app.py
+      privileged: false
+    description: Sdf
