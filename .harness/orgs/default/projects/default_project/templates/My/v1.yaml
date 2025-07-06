@@ -12,6 +12,6 @@ template:
       connectorRef: account.harnessImage
       image: python:3.9
       shell: Sh
-      command: python app.py
+      command: python hello.py
       privileged: false
     description: Sdf
